@@ -5,5 +5,16 @@ Olá, fiz esse repositório para armazenar os códigos que estou fazendo no meu 
 Para mais informações: 
 Victor Lima - Guia do programador - https://www.youtube.com/playlist?list=PLJ_KhUnlXUPtbtLwaxxUxHqvcNQndmI4B
 
-## instalação:
+## Instalação do node:
 - https://nodejs.org/en/download/
+
+## Instalação express:
+```
+npm install express --save
+
+```
+
+## Instalação nodemon
+```
+npm install nodemon -g
+```

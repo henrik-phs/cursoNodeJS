@@ -17,8 +17,8 @@ const app = express();
 Depois disso será necessário criar as rotas permitidas da sua aplicação.
 
 ```
-// req (requisição)
-// res (resposta)
+// req (recebe dados de uma requisição)
+// res (recebe dados de uma resposta)
 app.get("/", function(req, res) {
     res.send("Bem vindo");
 });
@@ -30,5 +30,14 @@ app.listen(8080);
 OU
 app.listen(8080, function() {
     console.log("Servidor rodando");
+});
+```
+
+# Definição de parâmetros
+
+Para criar uma rota com parâmetros, basta adicionar '/:nome_do_parametro':
+```
+app.get("/ola/:nome", function(req, res) {
+    res.send("Ola" + req.params.nome);
 });
 ```
