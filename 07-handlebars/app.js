@@ -1,13 +1,19 @@
 const express = require('express');
 const app = express();
-const handlebars = require('express-handlebars')
+const { engine } = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 // CONEXÃO COM BANCO DE DADOS
 const Sequelize = require('sequelize')
 
 // CONFIGURAÇÃO DA TEMPLATE ENGINE
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
+app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
+app.set('views', '07-handlebars/views')
+
+// CONFIGURAÇÃO BODY PARSER - NECESSÁRIO PARA MANIPULAR DADOS DE FORMULÁRIO
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // CONEXÃO COM BANCO DE DADOS
 const sequelize = new Sequelize('test', 'root', '', {
@@ -15,13 +21,13 @@ const sequelize = new Sequelize('test', 'root', '', {
     dialect: 'mysql'
 })
 
-// app.get('/', function(req, res) {
-//     res.sendFile(__dirname + "/html/index.html");
-// });
+app.get('/cadastro', function(req, res) {
+    res.render('form');
+});
 
-// app.get("/sobre", (req, res) => {
-//     res.sendFile(__dirname + "/html/sobre.html")
-// })
+app.post("/cadastrar", (req, res) => {
+    res.send("Titulo: " + req.body.titulo + "\nConteudo: " + req.body.conteudo)
+})
 
 app.listen(8080, function() {
     console.log("servidor rodando")
