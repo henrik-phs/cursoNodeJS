@@ -17,3 +17,45 @@ sequelize.authenticate().then(function() {
 }).catch(function(erro) {
     console.log("falla ao se conectar: " + erro)
 })
+
+/**
+ * CRIAÇÃO DE MODELS COM NODE
+ */
+
+const Postagem = sequelize.define('postagens', {
+    titulo: {
+        type: Sequelize.STRING
+    },
+    conteudo: {
+        type: Sequelize.TEXT
+    }
+});
+
+// Postagem.sync({ force: true }) // CRIA A TABELA. APÓS CRIADO A TABELA, PODE COMENTAR ESSE LINHA DE COMANDO
+// CRIAR UM REGISTRO
+// Postagem.create({
+//     titulo: 'Um título',
+//     conteudo: 'lsfljs lkfjl kfjlksjfo oenocjo sfon ofhsdbr'
+// })
+
+const Usuario = sequelize.define('usuarios', {
+        nome: {
+            type: Sequelize.STRING
+        },
+        sobrenome: {
+            type: Sequelize.STRING
+        },
+        idade: {
+            type: Sequelize.INTEGER
+        },
+        email: {
+            type: Sequelize.STRING
+        }
+    })
+    // Usuario.sync({ force: true })
+    // Usuario.create({
+    //     nome: 'Pedro',
+    //     sobrenome: 'Henrique',
+    //     idade: 25,
+    //     email: 'pedrohenriquedasilva100@gmail.com'
+    // })
