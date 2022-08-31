@@ -18,3 +18,11 @@ npm install express --save
 ```
 npm install nodemon -g
 ```
+
+## Conexão com banco de dados
+
+para usar banco de dados mysql com node é preciso instalar 2 módulos:
+```
+npm install --save sequelize
+npm install --save mysql2
+```
