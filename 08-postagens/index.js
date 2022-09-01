@@ -5,7 +5,13 @@ const bodyParser = require('body-parser')
 const Post = require('./models/Post')
 
 // CONFIGURA O HANDLEBARS
-app.engine('handlebars', engine())
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
+}))
 app.set('view engine', 'handlebars')
 app.set('views', '08-postagens/views')
 
@@ -15,7 +21,12 @@ app.use(bodyParser.json())
 
 // ROTAS
 app.get('/', (req, res) => {
-    res.render('home')
+    Post.findAll({ order: [
+            ['id', 'DESC']
+        ] }).then((posts) => {
+        res.render('home', { posts: posts })
+    })
+
 })
 
 app.get('/enviar-post', (req, res) => {

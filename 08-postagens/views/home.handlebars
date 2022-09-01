@@ -1,3 +1,10 @@
 <div class="card card-body">
     <h1>Postagens Recentes:</h1>
+
+    {{#each posts}}
+    <h2>{{titulo}} </h2>
+    <small>{{createdAt}}</small>
+    <p>{{conteudo}} </p>
+    <hr>
+    {{/each}}
 </div>
