@@ -21,9 +21,11 @@ app.use(bodyParser.json())
 
 // ROTAS
 app.get('/', (req, res) => {
-    Post.findAll({ order: [
+    Post.findAll({
+        order: [
             ['id', 'DESC']
-        ] }).then((posts) => {
+        ]
+    }).then((posts) => {
         res.render('home', { posts: posts })
     })
 
@@ -41,6 +43,14 @@ app.post('/postar', (req, res) => {
         res.redirect('/')
     }).catch((erro) => {
         res.send('Erro ao enviar dados: ' + erro)
+    })
+})
+
+app.get('/excluir/:id', (req, res) => {
+    Post.destroy({ where: { 'id': req.params.id } }).then(() => {
+        res.send('Postagem deletada com sucesso')
+    }).catch((erro) => {
+        res.send('Erro ao deletar postagem: ' + erro)
     })
 })
 
