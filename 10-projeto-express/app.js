@@ -5,6 +5,8 @@ const bodyParser = require('body-parser')
 
 const app = express()
 const admin = require('./routes/admin')
+
+const path = require('path')
     // const mongose = require('mongoose')
 
 // CONFIGURAÇÕES
@@ -22,6 +24,9 @@ app.engine('handlebars', engine({
 }))
 app.set('view engine', 'handlebars')
 app.set('views', '10-projeto-express/views')
+
+// PUBLIC
+app.use(express.static(path.join(__dirname, "public")))
 
 // ROTAS
 app.use('/admin', admin)
