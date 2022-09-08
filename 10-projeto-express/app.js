@@ -4,6 +4,7 @@ const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 
 const app = express()
+const admin = require('./routes/admin')
     // const mongose = require('mongoose')
 
 // CONFIGURAÇÕES
@@ -23,6 +24,7 @@ app.set('view engine', 'handlebars')
 app.set('views', '10-projeto-express/views')
 
 // ROTAS
+app.use('/admin', admin)
 
 // OUTROS
 app.listen(3000, () => {
