@@ -11,6 +11,32 @@ const admin = require('./routes/admin')
 const path = require('path') // MÓDULO RESPONSAVEL POR TRABALHAR COM DIRETÓRIOS
 const mongose = require('mongoose')
 
+const session = require('express-session')
+const flash = require('connect-flash')
+
+/**
+ * CONFIGURAÇÕES DE SESSÃO
+ */
+
+app.use(session({
+    secret: "cursodenode",
+    resave: true,
+    saveUninitialized: true
+}))
+
+app.use(flash())
+
+/**
+ * CONFIGURAÇÕES DE MIDLEWARE
+ * DEFINIÇÃO DE VARIÁVEIS GLOBAIS
+ */
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash("success_msg")
+    res.locals.error_msg = req.flash("error_msg")
+    next()
+})
+
 /**
  * CONFIGURAÇÕES
  * BODY PARSER - TRABALHA COM DADOS VINDOS DE FORMULÁRIO E TRANSFORMA EM JSON
