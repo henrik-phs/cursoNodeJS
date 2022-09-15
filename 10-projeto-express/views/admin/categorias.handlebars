@@ -3,3 +3,36 @@
 <hr>
 
 <a href="/admin/categorias/add" class="btn btn-outline-success">Nova categoria</a>
+
+<div class="card card-body mt-4" style="overflow-x: auto;">
+    {{#if categorias}}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Slug</th>
+                    <th scope="col">Adicionada</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categorias}}
+                    <tr>
+                        <td>{{nome}}</td>
+                        <td>{{slug}}</td>
+                        <td>{{date}}</td>
+                        <td>
+                            <a href="/admin/categorias/edit/{{_id}}" class="btn btn-outline-warning btn-sm">Editar</a>
+                            <form action="/admin/categorias/deletar/{{_id}}" method="post">
+                                <input type="hidden" name="id" value="{{_id}}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Deletar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        Nenhuma categoria cadastrada
+    {{/if}}
+</div>
