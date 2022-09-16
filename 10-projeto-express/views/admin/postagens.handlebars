@@ -1,0 +1,27 @@
+<h1>Lista de postagens</h1>
+
+<hr>
+
+<a href="/admin/postagens/add" class="btn btn-outline-success">Nova postagem</a>
+
+<div class="card card-body mt-4" style="overflow-x: auto;">
+    {{#each postagens}}
+        <div class="card card-body">
+            <h2>{{titulo}}</h2>
+            <small>{{slug}} - {{data}}</small>
+
+            <p>{{descricao}}</p>
+            <p>{{conteudo}}</p>
+            <small>{{categoria}}</small>
+
+            <a href="/admin/categorias/edit/{{_id}}" class="btn btn-outline-warning btn-sm">Editar</a>
+            <form action="/admin/categorias/deletar/{{_id}}" method="post">
+                <input type="hidden" name="id" value="{{_id}}">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Deletar</button>
+            </form>
+        </div>
+
+    {{else}}
+        Nenhuma postagem cadastrada
+    {{/each}}
+</div>

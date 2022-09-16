@@ -5,8 +5,12 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+
 require('../models/Categoria')
 const Categoria = mongoose.model('categorias')
+
+require('../models/Postagem')
+const Postagem = mongoose.model('postagens')
 
 router.get('/', (req, res) => {
     res.render('admin/index')
@@ -16,6 +20,10 @@ router.get('/posts', (req, res) => {
     res.send('Página de postagens')
 })
 
+/**
+ * Categorias
+ */
+
 router.get('/categorias', (req, res) => {
     Categoria.find().sort({ date: 'desc' }).then((categorias) => {
         res.render('admin/categorias', { categorias: categorias })
@@ -23,7 +31,6 @@ router.get('/categorias', (req, res) => {
         req.flash('error_msg', 'Houve um erro ao listar as categorias ' + err)
         res.redirect('/admin')
     })
-
 })
 
 router.get('/categorias/add', (req, res) => {
@@ -118,4 +125,72 @@ router.post('/categorias/deletar/:id', (req, res) => {
         res.redirect('/admin/categorias')
     })
 })
+
+/**
+ * Postagens
+ */
+
+router.get('/postagens', (req, res) => {
+    Postagem.find().sort({ date: 'desc' }).then((postagens) => {
+        res.render('admin/postagens', { postagens: postagens })
+    }).catch((err) => {
+        req.flash('error_msg', 'Houve um erro ao listar as postagens ' + err)
+        res.redirect('/admin')
+    })
+})
+
+router.get('/postagens/add', (req, res) => {
+    Categoria.find().sort({ date: 'desc' }).then((categorias) => {
+        res.render('admin/add-postagens', { categorias: categorias })
+    }).catch((err) => {
+        req.flash('error_msg', 'Houve um erro ao listar as categorias ' + err)
+        res.redirect('/admin')
+    })
+})
+
+router.post('/postagens/nova', (req, res) => {
+    var erros = []
+
+    if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
+        erros.push({ texto: 'Título inválido' })
+    }
+
+    if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
+        erros.push({ texto: 'Slug inválido' })
+    }
+
+    if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
+        erros.push({ texto: 'Descrição inválida' })
+    }
+
+    if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
+        erros.push({ texto: 'Conteúdo inválido' })
+    }
+
+    if (req.body.titulo.length < 2) {
+        erros.push({ texto: 'Nome da categoria muito pequeno' })
+    }
+
+    if (erros.length > 0) {
+        res.render('admin/add-postagens', { erros: erros })
+    } else {
+        const novaPostagem = {
+            titulo: req.body.titulo,
+            slug: req.body.slug,
+            descricao: req.body.descricao,
+            conteudo: req.body.conteudo,
+            categoria: req.body.categoria,
+        }
+
+        new Postagem(novaPostagem).save().then(() => {
+            req.flash('success_msg', 'Postagem salva com sucesso')
+            res.redirect('/admin/postagens')
+        }).catch((err) => {
+            req.flash('error_msg', 'Erro ao salvar postagem: ' + err)
+            res.redirect('/admin')
+        })
+    }
+
+})
+
 module.exports = router
