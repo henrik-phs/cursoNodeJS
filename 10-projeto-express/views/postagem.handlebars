@@ -1,0 +1,20 @@
+<h1>{{postagem.titulo}}</h1>
+<hr>
+
+<div class="card card-body">
+    <p>
+        <small>
+            <i class="fa-solid fa-calendar-days"></i> {{postagem.data}}
+        </small>
+    </p>
+    <p>
+        <small>
+            <span class="badge bg-primary">
+                <i class="fa-solid fa-tags"></i> {{postagem.categoria.nome}}</span>
+        </small>
+    </p>
+
+    <p>
+        <pre style="margin: 0; padding: 0; font-family:Arial, Helvetica, sans-serif; font-size: 18px">{{postagem.conteudo}}</pre>
+    </p>
+</div>

@@ -4,28 +4,28 @@
 
 <a href="/admin/postagens/add" class="btn btn-outline-success">Nova postagem</a>
 
-<div class="card card-body mt-4" style="overflow-x: auto;">
-    {{#each postagens}}
-        <div class="card card-body">
-            <h2>{{titulo}}</h2>
-            <small>{{slug}} - {{data}}</small>
+{{#each postagens}}
+    <div class="card card-body mt-4">
+        <h2>{{titulo}}</h2>
+        <small>{{slug}} - {{data}}</small>
 
-            <p>{{descricao}}</p>
-            <p>{{conteudo}}</p>
-            <small>Categoria: <span class="badge bg-primary">{{categoria.nome}}</span></small>
+        <p>{{descricao}}</p>
+        <p>{{conteudo}}</p>
+        <small>Categoria: <span class="badge bg-primary">{{categoria.nome}}</span></small>
 
-            <div class="row mt-4">
-                <div class="col-md-2 col-6">
-                    <a href="/admin/postagens/edit/{{_id}}" class="btn btn-outline-warning btn-sm form-control">Editar</a>
-                </div>
+        <div class="row mt-4">
+            <div class="col-md-2 col-6">
+                <a href="/admin/postagens/edit/{{_id}}" class="btn btn-outline-warning btn-sm form-control">Editar</a>
+            </div>
 
-                <div class="col-md-2 col-6">
-                    <a href="/admin/postagens/deletar/{{_id}}" class="btn btn-outline-danger btn-sm form-control">Deletar</a>
-                </div>
+            <div class="col-md-2 col-6">
+                <a href="/admin/postagens/deletar/{{_id}}"
+                    class="btn btn-outline-danger btn-sm form-control">Deletar</a>
             </div>
         </div>
+    </div>
 
-    {{else}}
-        Nenhuma postagem cadastrada
-    {{/each}}
-</div>
+{{else}}
+    Nenhuma postagem cadastrada
+{{/each}}
+<br>

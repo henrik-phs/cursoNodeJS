@@ -9,14 +9,16 @@ const app = express()
 const admin = require('./routes/admin')
 
 const path = require('path') // MÓDULO RESPONSAVEL POR TRABALHAR COM DIRETÓRIOS
-const mongose = require('mongoose')
+const mongoose = require('mongoose')
 
 const session = require('express-session')
 const flash = require('connect-flash')
 
-/**
- * CONFIGURAÇÕES DE SESSÃO
- */
+require('./models/Postagem')
+const Postagem = mongoose.model('postagens')
+    /**
+     * CONFIGURAÇÕES DE SESSÃO
+     */
 
 app.use(session({
     secret: "cursodenode",
@@ -62,8 +64,8 @@ app.set('views', '10-projeto-express/views')
  * CONFIGURAÇÕES DO MONGOOSE
  * RESPONSÁVEL PELA CONEÇÃO COM BANCO DE DADOS MONGODB
  */
-mongose.Promise = global.Promise
-mongose.connect("mongodb://localhost/blogapp").then(() => {
+mongoose.Promise = global.Promise
+mongoose.connect("mongodb://localhost/blogapp").then(() => {
     console.log("conectado ao mongo")
 }).catch((err) => {
     console.log("erro ao conectar: " + err)
@@ -78,6 +80,26 @@ app.use(express.static(path.join(__dirname, "public")))
 /**
  * ROTAS
  */
+app.get('/', (req, res) => {
+    Postagem.find().populate('categoria').sort({ data: 'desc' }).then((postagens) => {
+        res.render('index', { postagens: postagens })
+    })
+})
+
+app.get('/postagem/:slug', (req, res) => {
+    Postagem.findOne({ slug: req.params.slug }).populate('categoria').then((postagem) => {
+        if (postagem) {
+            res.render('postagem', { postagem: postagem })
+        } else {
+            req.flash('error_msg', 'Esta postagem não existe')
+            res.redirect('/')
+        }
+    }).catch((err) => {
+        req.flash('error_msg', 'Houve um erro interno')
+        res.redirect('/')
+    })
+})
+
 app.use('/admin', admin)
 
 /**

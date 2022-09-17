@@ -1,0 +1,21 @@
+<h1>Posts Mais recentes</h1>
+<hr>
+
+{{#each postagens}}
+    <div class="card card-body">
+        <h2>{{titulo}}</h2>
+        <hr>
+
+        <p><small><i class="fa-solid fa-calendar-days"></i> {{data}}</small></p>
+        <p><small><span class="badge bg-primary"><i class="fa-solid fa-tags"></i> {{categoria.nome}}</span></small></p>
+
+        <p>{{descricao}}</p>
+        <a href="/postagem/{{slug}}">Saiba mais...</a>
+    </div>
+    <br>
+
+{{else}}
+    <div class="card card-body">
+        Nenhuma postagem publicada ainda
+    </div>
+{{/each}}

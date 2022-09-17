@@ -151,50 +151,56 @@ router.get('/postagens/add', (req, res) => {
 router.post('/postagens/nova', (req, res) => {
     var erros = []
 
-    if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
-        erros.push({ texto: 'Título inválido' })
-    }
+    Postagem.find({ slug: req.body.slug }).then((postagens) => {
+        if (postagens) {
+            erros.push({ texto: 'Esse slug já está sendo utilizado, preecha outro slug' })
+            res.render('admin/add-postagens', { erros: erros, dados: req.body })
+        } else {
+            if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
+                erros.push({ texto: 'Título inválido' })
+            }
 
-    if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
-        erros.push({ texto: 'Slug inválido' })
-    }
+            if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
+                erros.push({ texto: 'Slug inválido' })
+            }
 
-    if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
-        erros.push({ texto: 'Descrição inválida' })
-    }
+            if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
+                erros.push({ texto: 'Descrição inválida' })
+            }
 
-    if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
-        erros.push({ texto: 'Conteúdo inválido' })
-    }
+            if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
+                erros.push({ texto: 'Conteúdo inválido' })
+            }
 
-    if (req.body.categoria == 0) {
-        erros.push({ text: 'Categoria inválida, registre uma categoria' })
-    }
+            if (req.body.categoria == 0) {
+                erros.push({ text: 'Categoria inválida, registre uma categoria' })
+            }
 
-    if (req.body.titulo.length < 2) {
-        erros.push({ texto: 'Nome da categoria muito pequeno' })
-    }
+            if (req.body.titulo.length < 2) {
+                erros.push({ texto: 'Nome da categoria muito pequeno' })
+            }
 
-    if (erros.length > 0) {
-        res.render('admin/add-postagens', { erros: erros })
-    } else {
-        const novaPostagem = {
-            titulo: req.body.titulo,
-            slug: req.body.slug,
-            descricao: req.body.descricao,
-            conteudo: req.body.conteudo,
-            categoria: req.body.categoria,
+            if (erros.length > 0) {
+                res.render('admin/add-postagens', { erros: erros })
+            } else {
+                const novaPostagem = {
+                    titulo: req.body.titulo,
+                    slug: req.body.slug,
+                    descricao: req.body.descricao,
+                    conteudo: req.body.conteudo,
+                    categoria: req.body.categoria,
+                }
+
+                new Postagem(novaPostagem).save().then(() => {
+                    req.flash('success_msg', 'Postagem salva com sucesso')
+                    res.redirect('/admin/postagens')
+                }).catch((err) => {
+                    req.flash('error_msg', 'Erro ao salvar postagem: ' + err)
+                    res.redirect('/admin')
+                })
+            }
         }
-
-        new Postagem(novaPostagem).save().then(() => {
-            req.flash('success_msg', 'Postagem salva com sucesso')
-            res.redirect('/admin/postagens')
-        }).catch((err) => {
-            req.flash('error_msg', 'Erro ao salvar postagem: ' + err)
-            res.redirect('/admin')
-        })
-    }
-
+    })
 })
 
 router.get('/postagens/edit/:id', (req, res) => {
@@ -244,7 +250,7 @@ router.post('/postagens/edit', (req, res) => {
             postagem.descricao = req.body.descricao
             postagem.conteudo = req.body.conteudo
 
-            if (req.body.postagem) {
+            if (req.body.postagem != 0) {
                 postagem.categoria = req.body.categoria
             }
 
