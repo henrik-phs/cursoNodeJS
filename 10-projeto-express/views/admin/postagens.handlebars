@@ -12,13 +12,17 @@
 
             <p>{{descricao}}</p>
             <p>{{conteudo}}</p>
-            <small>{{categoria}}</small>
+            <small>Categoria: <span class="badge bg-primary">{{categoria.nome}}</span></small>
 
-            <a href="/admin/categorias/edit/{{_id}}" class="btn btn-outline-warning btn-sm">Editar</a>
-            <form action="/admin/categorias/deletar/{{_id}}" method="post">
-                <input type="hidden" name="id" value="{{_id}}">
-                <button type="submit" class="btn btn-outline-danger btn-sm">Deletar</button>
-            </form>
+            <div class="row mt-4">
+                <div class="col-md-2 col-6">
+                    <a href="/admin/postagens/edit/{{_id}}" class="btn btn-outline-warning btn-sm form-control">Editar</a>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <a href="/admin/postagens/deletar/{{_id}}" class="btn btn-outline-danger btn-sm form-control">Deletar</a>
+                </div>
+            </div>
         </div>
 
     {{else}}
