@@ -16,9 +16,13 @@ const flash = require('connect-flash')
 
 require('./models/Postagem')
 const Postagem = mongoose.model('postagens')
-    /**
-     * CONFIGURAÇÕES DE SESSÃO
-     */
+
+require('./models/Categoria')
+const Categoria = mongoose.model('categorias')
+
+/**
+ * CONFIGURAÇÕES DE SESSÃO
+ */
 
 app.use(session({
     secret: "cursodenode",
@@ -96,6 +100,34 @@ app.get('/postagem/:slug', (req, res) => {
         }
     }).catch((err) => {
         req.flash('error_msg', 'Houve um erro interno')
+        res.redirect('/')
+    })
+})
+
+app.get('/categorias', (req, res) => {
+    Categoria.find().sort({ nome: 'desc' }).then((categorias) => {
+        res.render('categorias', { categorias: categorias })
+    }).catch((err) => {
+        req.flash('error_msg', 'Houve um erro interno ao listar as categorias')
+        res.redirect('/')
+    })
+})
+
+app.get('/categorias/:slug', (req, res) => {
+    Categoria.findOne({ slug: req.params.slug }).then((categoria) => {
+        if (categoria) {
+            Postagem.find({ categoria: categoria._id }).sort({ data: 'desc' }).then((postagens) => {
+                res.render('posts-categoria', { categoria: categoria, postagens: postagens })
+            }).catch((err) => {
+                req.flash('error_msg', 'Houve um erro interno ao listar as postagens')
+                res.redirect('/')
+            })
+        } else {
+            req.flash('error_msg', 'Essa categoria não existe')
+            res.redirect('/')
+        }
+    }).catch((err) => {
+        req.flash('error_msg', 'Houve um erro interno ao listar as categorias')
         res.redirect('/')
     })
 })
