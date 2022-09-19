@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 
 const app = express()
 const admin = require('./routes/admin')
+const usuario = require('./routes/usuario')
 
 const path = require('path') // MÓDULO RESPONSAVEL POR TRABALHAR COM DIRETÓRIOS
 const mongoose = require('mongoose')
@@ -133,6 +134,7 @@ app.get('/categorias/:slug', (req, res) => {
 })
 
 app.use('/admin', admin)
+app.use('/usuarios', usuario)
 
 /**
  * RESPONSÁVEL POR CRIAR UM SERVIDO NODE E RODAR O PROGRAMA NO NAVEGADOR
