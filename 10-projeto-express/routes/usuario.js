@@ -5,6 +5,7 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 
 require('../models/Usuario')
 const Usuario = mongoose.model('usuarios')
@@ -39,18 +40,39 @@ router.post('/cadastrar', (req, res) => {
     if (erros.length > 0) {
         res.render('usuarios/cadastro', { erros: erros, dados: req.body })
     } else {
-        const novoUsuario = {
-            nome: req.body.nome,
-            email: req.body.email,
-            senha: req.body.senha
-        }
+        Usuario.findOne({ email: req.body.email }).then((usuario) => {
+            if (usuario) {
+                erros.push({ texto: 'Email já cadastrado' })
+                res.render('usuarios/cadastro', { erros: erros, dados: req.body })
+            } else {
+                const novoUsuario = new Usuario({
+                    nome: req.body.nome,
+                    email: req.body.email,
+                    senha: req.body.senha
+                })
 
-        new Usuario(novoUsuario).save().then(() => {
-            req.flash('success_msg', 'Usuário cadastrado com sucesso')
-            res.redirect('/')
+                bcrypt.genSalt(10, (erro, salt) => {
+                    bcrypt.hash(novoUsuario.senha, salt, (erro, hash) => {
+                        if (erro) {
+                            req.flash('error_msg', 'Houve um erro durante o salvamento')
+                            res.redirect('/usuarios/cadastro')
+                        }
+
+                        novoUsuario.senha = hash
+
+                        novoUsuario.save().then(() => {
+                            req.flash('success_msg', 'Usuário cadastrado com sucesso')
+                            res.redirect('/')
+                        }).catch((err) => {
+                            req.flash('error_msg', 'Erro ao salvar categoria: ' + err)
+                            res.redirect('/usuarios/cadastro')
+                        })
+                    })
+                })
+            }
         }).catch((err) => {
-            req.flash('error_msg', 'Erro ao salvar categoria: ' + err)
-            res.redirect('/usuarios/cadastro')
+            req.flash('error_msg', 'Houve um erro interno: ' + err)
+            res.redirect('/')
         })
     }
 
