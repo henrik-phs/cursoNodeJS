@@ -1,6 +1,3 @@
-<h1>Posts Mais recentes</h1>
-<hr>
-
 {{#each postagens}}
     <div class="card card-body">
         <h2><a href="/postagem/{{slug}}">{{titulo}}</a></h2>
@@ -8,7 +5,7 @@
 
         <p>
             <small>
-                <i class="fa-solid fa-calendar-days"></i> {{data}}
+                <i class="fa-solid fa-calendar-days"></i> <i>{{#formatDate data}}{{/formatDate}}</i>
             </small>
         </p>
 

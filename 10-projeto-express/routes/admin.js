@@ -13,12 +13,9 @@ require('../models/Postagem')
 const Postagem = mongoose.model('postagens')
 
 router.get('/', (req, res) => {
-    res.render('admin/index')
+    res.render('admin/index', { title: 'Admin' })
 })
 
-router.get('/posts', (req, res) => {
-    res.send('Página de postagens')
-})
 
 /**
  * Categorias
@@ -26,7 +23,7 @@ router.get('/posts', (req, res) => {
 
 router.get('/categorias', (req, res) => {
     Categoria.find().sort({ date: 'desc' }).then((categorias) => {
-        res.render('admin/categorias', { categorias: categorias })
+        res.render('admin/categorias', { title: 'Categorias - Admin', categorias: categorias })
     }).catch((err) => {
         req.flash('error_msg', 'Houve um erro ao listar as categorias ' + err)
         res.redirect('/admin')
@@ -34,7 +31,7 @@ router.get('/categorias', (req, res) => {
 })
 
 router.get('/categorias/add', (req, res) => {
-    res.render('admin/add-categorias')
+    res.render('admin/add-categorias', { title: 'Adicionar uma categoria' })
 })
 
 router.post('/categorias/nova', (req, res) => {
@@ -73,7 +70,7 @@ router.post('/categorias/nova', (req, res) => {
 
 router.get('/categorias/edit/:id', (req, res) => {
     Categoria.findOne({ _id: req.params.id }).then((categoria) => {
-        res.render('admin/edit-categorias', { categoria: categoria })
+        res.render('admin/edit-categorias', { title: 'Editar categoria ' + categoria.nome, categoria: categoria })
     }).catch((err) => {
         req.flash('error_msg', 'Essa categoria não existe ' + err)
         res.redirect('/admin/categorias')
@@ -132,7 +129,7 @@ router.post('/categorias/deletar/:id', (req, res) => {
 
 router.get('/postagens', (req, res) => {
     Postagem.find().populate('categoria').sort({ data: 'desc' }).then((postagens) => {
-        res.render('admin/postagens', { postagens: postagens })
+        res.render('admin/postagens', { title: 'Postagens - Admin', postagens: postagens })
     }).catch((err) => {
         req.flash('error_msg', 'Houve um erro ao listar as postagens ' + err)
         res.redirect('/admin')
@@ -141,7 +138,7 @@ router.get('/postagens', (req, res) => {
 
 router.get('/postagens/add', (req, res) => {
     Categoria.find().sort({ date: 'desc' }).then((categorias) => {
-        res.render('admin/add-postagens', { categorias: categorias })
+        res.render('admin/add-postagens', { title: 'Adicionar uma postagem', categorias: categorias })
     }).catch((err) => {
         req.flash('error_msg', 'Houve um erro ao listar as categorias ' + err)
         res.redirect('/admin')
@@ -151,8 +148,9 @@ router.get('/postagens/add', (req, res) => {
 router.post('/postagens/nova', (req, res) => {
     var erros = []
 
-    Postagem.find({ slug: req.body.slug }).then((postagens) => {
-        if (postagens) {
+    Postagem.findOne({ slug: req.body.slug }).then((postagens) => {
+        console.log(postagens)
+        if (postagens && typeof postagens != undefined && postagens != null) {
             erros.push({ texto: 'Esse slug já está sendo utilizado, preecha outro slug' })
             res.render('admin/add-postagens', { erros: erros, dados: req.body })
         } else {
@@ -206,7 +204,7 @@ router.post('/postagens/nova', (req, res) => {
 router.get('/postagens/edit/:id', (req, res) => {
     Postagem.findOne({ _id: req.params.id }).then((postagem) => {
         Categoria.find().then((categorias) => {
-            res.render('admin/edit-postagens', { postagem: postagem, categorias: categorias })
+            res.render('admin/edit-postagens', { title: 'Editar postagem ' + postagem.nome, postagem: postagem, categorias: categorias })
         }).catch((err) => {
             req.flash('error_msg', 'Nenhuma categoria encontrada ' + err)
             res.redirect('/admin/postagens')

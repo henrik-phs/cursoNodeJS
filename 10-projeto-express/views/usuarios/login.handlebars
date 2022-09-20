@@ -1,0 +1,19 @@
+<div class="card card-body">
+    <div class="col-md-6">
+        <form action="/usuarios/logar" method="post">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{dados.email}}" required>
+            </div>
+
+            <div class="form-group mt-2">
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" id="senha" class="form-control" value="{{dados.senha}}" required>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-outline-success">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</div>

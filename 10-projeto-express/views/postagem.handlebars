@@ -1,10 +1,7 @@
-<h1>{{postagem.titulo}}</h1>
-<hr>
-
 <div class="card card-body">
     <p>
         <small>
-            <i class="fa-solid fa-calendar-days"></i> {{postagem.data}}
+            <i class="fa-solid fa-calendar-days"></i> <i>{{#formatDate postagem.data}}{{/formatDate}}</i>
         </small>
     </p>
     <p>

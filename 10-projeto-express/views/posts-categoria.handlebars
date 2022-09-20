@@ -1,12 +1,9 @@
-<h1>Categoria {{categoria.nome}}</h1>
-<hr>
-
 {{#each postagens}}
     <div class="card card-body">
         <h2><a href="/postagem/{{slug}}">{{titulo}}</a></h2>
         <hr>
 
-        <p><small><i class="fa-solid fa-calendar-days"></i> {{data}}</small></p>
+        <p><small><i class="fa-solid fa-calendar-days"></i> <i>{{#formatDate data}}{{/formatDate}}</i></small></p>
 
         <p>{{descricao}}</p>
         <a href="/postagem/{{slug}}">Saiba mais...</a>

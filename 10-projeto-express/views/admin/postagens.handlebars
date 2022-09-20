@@ -1,13 +1,9 @@
-<h1>Lista de postagens</h1>
-
-<hr>
-
 <a href="/admin/postagens/add" class="btn btn-outline-success">Nova postagem</a>
 
 {{#each postagens}}
     <div class="card card-body mt-4">
         <h2>{{titulo}}</h2>
-        <small>{{slug}} - {{data}}</small>
+        <small><i>{{slug}}</i> - <i>{{#formatDate data}}{{/formatDate}}</i></small>
 
         <p>{{descricao}}</p>
         <p>{{conteudo}}</p>

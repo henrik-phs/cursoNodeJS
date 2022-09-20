@@ -11,7 +11,7 @@ require('../models/Usuario')
 const Usuario = mongoose.model('usuarios')
 
 router.get('/cadastro', (req, res) => {
-    res.render('usuarios/cadastro')
+    res.render('usuarios/cadastro', { title: 'Cadastre-se' })
 })
 
 router.post('/cadastrar', (req, res) => {
@@ -38,7 +38,7 @@ router.post('/cadastrar', (req, res) => {
     }
 
     if (erros.length > 0) {
-        res.render('usuarios/cadastro', { erros: erros, dados: req.body })
+        res.render('usuarios/cadastro', { title: 'Cadastre-se', erros: erros, dados: req.body })
     } else {
         Usuario.findOne({ email: req.body.email }).then((usuario) => {
             if (usuario) {
@@ -76,6 +76,10 @@ router.post('/cadastrar', (req, res) => {
         })
     }
 
+})
+
+router.get('/login', (req, res) => {
+    res.render('usuarios/login', { title: 'Logar-se' })
 })
 
 module.exports = router

@@ -21,6 +21,11 @@ const Postagem = mongoose.model('postagens')
 require('./models/Categoria')
 const Categoria = mongoose.model('categorias')
 
+// const functions = require('./public/js/functions')
+// console.log(functions.formataData('2022-09-20T02:31:03.290+00:00'))
+
+const moment = require('moment');
+
 /**
  * CONFIGURAÇÕES DE SESSÃO
  */
@@ -60,6 +65,11 @@ app.engine('handlebars', engine({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
+    },
+    helpers: {
+        formatDate: (date) => {
+            return moment(date).format('DD/MM/YYYY')
+        }
     }
 }))
 app.set('view engine', 'handlebars')
@@ -86,15 +96,15 @@ app.use(express.static(path.join(__dirname, "public")))
  * ROTAS
  */
 app.get('/', (req, res) => {
-    Postagem.find().populate('categoria').sort({ data: 'desc' }).then((postagens) => {
-        res.render('index', { postagens: postagens })
+    Postagem.find().populate('categoria').sort({ data: 'desc' }).then((postagens, functions) => {
+        res.render('index', { title: 'Blog do NodeJs', postagens: postagens, functions: functions })
     })
 })
 
 app.get('/postagem/:slug', (req, res) => {
     Postagem.findOne({ slug: req.params.slug }).populate('categoria').then((postagem) => {
         if (postagem) {
-            res.render('postagem', { postagem: postagem })
+            res.render('postagem', { title: postagem.titulo, postagem: postagem })
         } else {
             req.flash('error_msg', 'Esta postagem não existe')
             res.redirect('/')
@@ -107,7 +117,7 @@ app.get('/postagem/:slug', (req, res) => {
 
 app.get('/categorias', (req, res) => {
     Categoria.find().sort({ nome: 'desc' }).then((categorias) => {
-        res.render('categorias', { categorias: categorias })
+        res.render('categorias', { title: 'Categorias - Blog do NodeJs', categorias: categorias })
     }).catch((err) => {
         req.flash('error_msg', 'Houve um erro interno ao listar as categorias')
         res.redirect('/')
@@ -118,7 +128,7 @@ app.get('/categorias/:slug', (req, res) => {
     Categoria.findOne({ slug: req.params.slug }).then((categoria) => {
         if (categoria) {
             Postagem.find({ categoria: categoria._id }).sort({ data: 'desc' }).then((postagens) => {
-                res.render('posts-categoria', { categoria: categoria, postagens: postagens })
+                res.render('posts-categoria', { title: categoria.nome + ' - Categoria', categoria: categoria, postagens: postagens })
             }).catch((err) => {
                 req.flash('error_msg', 'Houve um erro interno ao listar as postagens')
                 res.redirect('/')
