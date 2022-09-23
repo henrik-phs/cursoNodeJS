@@ -24,7 +24,11 @@ const Categoria = mongoose.model('categorias')
 // const functions = require('./public/js/functions')
 // console.log(functions.formataData('2022-09-20T02:31:03.290+00:00'))
 
+// MÓDULO PARA FORMATAÇÃO DE DATAS
 const moment = require('moment');
+
+const passport = require('passport')
+require('./config/auth')(passport)
 
 /**
  * CONFIGURAÇÕES DE SESSÃO
@@ -36,6 +40,14 @@ app.use(session({
     saveUninitialized: true
 }))
 
+/**
+ * INICIALIZAR O AUTENTICADOR PASSPORT
+ */
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+// FLASH MESSAGES
 app.use(flash())
 
 /**
