@@ -163,6 +163,8 @@ app.use('/usuarios', usuario)
 /**
  * RESPONSÁVEL POR CRIAR UM SERVIDO NODE E RODAR O PROGRAMA NO NAVEGADOR
  */
-app.listen(3000, () => {
+
+const port = process.env.PORT || 3000
+app.listen(port, () => {
     console.log('servidor rodando')
 })
